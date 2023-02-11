@@ -1,6 +1,6 @@
 namespace StateNationalParkApi.Models
 {
-  public class StateNationalPark
+  public class Park
   {
     public int ParkId { get; set; }
     public string ParkName { get; set; }
