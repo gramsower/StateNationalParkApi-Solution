@@ -11,8 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<StateNationalParkApiContext>(
                   dbContextOptions => dbContextOptions.UseMySql(builder.Configuration
                   ["ConnectionStrings:DefaultConnection"],
-                  ServerVersion.AutoDetect(builder.Configuration
-                  ["ConnectionStrings:DefaultConnection"])));
+                  ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"])));
 
 builder.Services.AddApiVersioning(opt =>
                         {
@@ -28,18 +27,18 @@ builder.Services.AddApiVersioning(opt =>
 
 builder.Services.AddVersionedApiExplorer(setup =>
 {
-    setup.GroupNameFormat = " v'VVV";
+    setup.GroupNameFormat = "'v'VVV";
     setup.SubstituteApiVersionInUrl = true;
 });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 
 var app = builder.Build();
 
-// var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,7 +48,7 @@ if (app.Environment.IsDevelopment())
   {
     foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
     {
-      options.SwaggerEndpoints($"/swagger/{description.GroupName}/swagger.json",
+      options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
         description.GroupName.ToUpperInvariant());
     }
   });
